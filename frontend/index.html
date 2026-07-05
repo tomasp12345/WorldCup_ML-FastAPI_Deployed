@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Predictor Mundial 2026</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <div class="max-w-6xl mx-auto px-6 py-8"></div>
+      <h1 class="text-4xl font-bold text-green-400 mb-8">Predictor Mundial 2026</h1>
+
+      <!-- NUEVA sección del bracket, va primero -->
+      <section id="wc-knockout">
+        <h2>WC Knockout 2026</h2>
+        <div class="flex items-start justify-center gap-2">
+          <div id="bracket-izq" class="brackets-viewer"></div>
+          <div id="bracket-final" class="flex items-center" style="min-height: 400px;"></div>
+          <div id="bracket-der" class="brackets-viewer bracket-espejo"></div>
+        </div>
+      </section>
+
+      <!-- La sección que ya tenías, queda debajo -->
+      <section id="predict-a-match">
+        <h2 class="text-2xl font-semibold text-green-400 mb-4 mt-8">WC Knockout 2026</h2>
+        <div class="selectores">
+          <input id="equipoLocal" type="text" placeholder="Brazil" />
+          <span>vs</span>
+          <input id="equipoVisitante" type="text" placeholder="Japan" />
+          <button id="botonPredecir">Predecir</button>
+        </div>
+        <div id="detallePartido"></div>
+      </section>
+      <!-- Modal para el detalle del partido (oculto por defecto) -->
+      <div id="modalOverlay" class="modal-overlay oculto">
+        <div class="modal-contenido">
+          <button id="cerrarModal" class="cerrar">&times;</button>
+          <div id="modalDetalle"></div>
+        </div>
+      </div>
+      <script type="module" src="/src/main.js"></script>
+    </div>
+</body>
+</html>
