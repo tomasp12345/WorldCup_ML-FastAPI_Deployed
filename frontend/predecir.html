@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.svg" />
+  <title>Predict a match · World Cup 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body class="text-slate-200 min-h-screen">
+  <!-- Shared navigation bar -->
+  <header class="border-b border-slate-800/80 bg-slate-950/60 backdrop-blur sticky top-0 z-40">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/index.html" class="text-lg font-extrabold brand-gradient tracking-tight">⚽ World Cup 2026 Predictor</a>
+      <div class="flex items-center gap-1">
+        <a href="/index.html"
+           class="px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition">Bracket</a>
+        <a href="/predecir.html"
+           class="px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20">Predict a match</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-6 py-12">
+    <section id="predict-a-match">
+      <h1 class="text-4xl font-extrabold text-slate-50 tracking-tight mb-3">Predict a match</h1>
+      <p class="text-slate-400 mb-8">Enter any two national teams (in English, e.g. <span class="text-slate-200">Brazil</span> and <span class="text-slate-200">Japan</span>) and the model will estimate the result.</p>
+
+      <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 shadow-xl shadow-black/30">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3">
+          <label class="flex-1">
+            <span class="block text-xs uppercase tracking-wide text-slate-500 mb-1.5">Home team</span>
+            <input id="equipoLocal" type="text" placeholder="Brazil" list="lista-equipos" autocomplete="off"
+              class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-3 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+          </label>
+          <span class="text-slate-600 font-bold pb-3 text-center">vs</span>
+          <label class="flex-1">
+            <span class="block text-xs uppercase tracking-wide text-slate-500 mb-1.5">Away team</span>
+            <input id="equipoVisitante" type="text" placeholder="Japan" list="lista-equipos" autocomplete="off"
+              class="w-full bg-slate-950/70 border border-slate-700 rounded-lg px-3 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition" />
+          </label>
+
+          <!-- Opciones de autocompletado (se llenan desde el backend en predecir.js) -->
+          <datalist id="lista-equipos"></datalist>
+          <button id="botonPredecir"
+            class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg px-6 py-2.5 transition shadow-lg shadow-emerald-500/20">Predict</button>
+        </div>
+      </div>
+
+      <div id="detallePartido" class="mt-6"></div>
+    </section>
+  </main>
+
+  <script type="module" src="/src/predecir.js"></script>
+</body>
+</html>

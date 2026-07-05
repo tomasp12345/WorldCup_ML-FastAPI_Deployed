@@ -1,66 +1,169 @@
 @import "tailwindcss";
 
-/* --- Modal (tu CSS propio, esto SÍ se queda) --- */
-.modal-overlay.oculto {
-  display: none !important;
+/* ============================================================
+   Sistema de diseño
+   ============================================================ */
+:root {
+  --brand: #34d399;      /* emerald-400 */
+  --brand-strong: #10b981;
+  --ink: #e2e8f0;        /* slate-200 */
+  --muted: #94a3b8;      /* slate-400 */
 }
+
+body {
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Fondo con un sutil brillo verde arriba, para que no sea un plano muerto */
+  background:
+    radial-gradient(1100px 520px at 50% -8%, rgba(16, 185, 129, 0.12), transparent 60%),
+    linear-gradient(180deg, #0b1120 0%, #0a0f1a 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Marca con degradado */
+.brand-gradient {
+  background: linear-gradient(90deg, #34d399, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ============================================================
+   Modal (tema oscuro coherente)
+   ============================================================ */
+.modal-overlay.oculto { display: none !important; }
 
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 16px;
+  z-index: 50;
 }
 
 .modal-contenido {
-  background: white;
-  color: black;
-  padding: 20px;
-  max-width: 600px;
-  max-height: 80vh;
+  background: #0f172a;
+  color: var(--ink);
+  border: 1px solid #1e293b;
+  border-radius: 18px;
+  padding: 26px;
+  max-width: 640px;
+  width: 100%;
+  max-height: 85vh;
   overflow-y: auto;
   position: relative;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
 }
 
 .cerrar {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 24px;
+  top: 14px;
+  right: 16px;
+  font-size: 22px;
+  line-height: 1;
+  height: 30px;
+  width: 30px;
+  border-radius: 8px;
+  color: var(--muted);
   cursor: pointer;
+  background: #1e293b;
+  border: none;
+  transition: all 0.15s;
 }
+.cerrar:hover { color: #f1f5f9; background: #334155; }
 
-.partido {
-  cursor: pointer;
-}
+.partido { cursor: pointer; }
 
-
-/* --- Tema oscuro para el bracket (nombres exactos de la librería) --- */
+/* ============================================================
+   Bracket (variables exactas de la librería brackets-viewer)
+   ============================================================ */
 .brackets-viewer {
-  --primary-background: #1e293b !important;
+  --primary-background: transparent !important;
   --secondary-background: #0f172a !important;
-  --match-background: #1e293b !important;
-  --font-color: #e2e8f0 !important;
-  --win-color: #4ade80 !important;
-  --loss-color: #f87171 !important;
-  --label-color: #94a3b8 !important;
-  --hint-color: #94a3b8 !important;
-  --connector-color: #475569 !important;
-  --border-color: #334155 !important;
-  --border-hover-color: #4ade80 !important;
+  --match-background: #111a2e !important;
+  --font-color: var(--ink) !important;
+  --win-color: #34d399 !important;
+  --loss-color: #64748b !important;          /* perdedor apagado, no rojo agresivo */
+  --label-color: #64748b !important;
+  --hint-color: #64748b !important;
+  --connector-color: #334155 !important;
+  --border-color: #24314a !important;
+  --border-hover-color: #34d399 !important;
+  --participant-image-size: 16px !important;
+  --match-width: 148px !important;
+  --match-border-radius: 8px !important;
+  --match-border-width: 1px !important;
+  --round-margin: 30px !important;
+  /* Sin scroll interno ni padding grande: usamos un solo contenedor externo */
+  overflow: visible !important;
+  padding: 4px 8px !important;
+  font-size: 13px !important;
 }
 
-
-/* Voltear horizontalmente el bracket derecho */
-.bracket-espejo {
-  transform: scaleX(-1);
+/* Cabecera de cada ronda como "píldora" */
+.brackets-viewer h3 {
+  background: transparent !important;
+  color: var(--muted) !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 8px 0 !important;
+  margin-bottom: 6px !important;
 }
-/* Des-voltear el texto para que se lea normal */
+
+/* Caja de partido: un poco más de aire y transición suave */
+.brackets-viewer .opponents {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: border-color 0.15s, transform 0.15s;
+}
+.brackets-viewer .opponents:hover {
+  transform: translateY(-1px);
+  cursor: pointer;
+}
+
+/* Cada fila (participante): compacta pero legible */
+.brackets-viewer .participant {
+  padding: 4px 8px !important;
+}
+
+/* Nombre + bandera en UNA sola línea (bandera al lado, no encima) */
+.brackets-viewer .participant .name {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px;
+}
+
+/* Banderas: completas (no recortadas en cuadrado), sin encoger */
+.brackets-viewer .name > img {
+  width: 18px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  flex: 0 0 auto;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* Ganador: nombre resaltado */
+.brackets-viewer .participant.win .name {
+  color: #f8fafc !important;
+}
+
+/* EMPATE: marcador en amarillo (se define por penales). Clase puesta por JS. */
+.brackets-viewer .opponents.empate .result {
+  color: #facc15 !important;
+  font-weight: 700 !important;
+}
+
+/* ============================================================
+   Espejo del bracket derecho
+   ============================================================ */
+.bracket-espejo { transform: scaleX(-1); }
+/* Des-voltear el contenido (texto + bandera van dentro de .name, se arreglan juntos) */
 .bracket-espejo .name,
 .bracket-espejo .result,
 .bracket-espejo h3,
@@ -69,7 +172,5 @@
   transform: scaleX(-1);
   display: inline-block;
 }
-/* Ocultar el título interno que mete la librería (redundante y se voltea) */
-.brackets-viewer h1 {
-  display: none;
-}
+/* Ocultar el título interno de la librería (redundante y se voltea) */
+.brackets-viewer h1 { display: none; }

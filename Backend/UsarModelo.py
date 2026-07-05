@@ -11,6 +11,11 @@ from scipy.stats import poisson
 modelo = joblib.load("data/modelo_poisson.joblib")
 elo_fifa = joblib.load("data/elo_fifa.joblib")
 
+# --- Lista de equipos que el modelo conoce (para el autocompletado del frontend) ---
+def listar_equipos():
+    # elo_fifa es un dict {nombre_equipo: elo}. Devolvemos los nombres ordenados.
+    return sorted(elo_fifa.keys())
+
 # --- Función auxiliar: la matriz de marcadores (la misma de 2.PepararDatos_ElegirModelo.ipynb)
 def matriz_marcadores(lambda_local, lambda_visitante, max_goles=6):
     probs_local = [poisson.pmf(i, lambda_local) for i in range(max_goles + 1)]

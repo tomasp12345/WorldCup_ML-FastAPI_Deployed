@@ -1,43 +1,61 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Predictor Mundial 2026</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/favicon.svg" />
+  <title>World Cup 2026 Predictor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen">
-    <div class="max-w-6xl mx-auto px-6 py-8"></div>
-      <h1 class="text-4xl font-bold text-green-400 mb-8">Predictor Mundial 2026</h1>
+<body class="text-slate-200 min-h-screen">
+  <!-- Shared navigation bar -->
+  <header class="border-b border-slate-800/80 bg-slate-950/60 backdrop-blur sticky top-0 z-40">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/index.html" class="text-lg font-extrabold brand-gradient tracking-tight">⚽ World Cup 2026 Predictor</a>
+      <div class="flex items-center gap-1">
+        <a href="/index.html"
+           class="px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20">Bracket</a>
+        <a href="/predecir.html"
+           class="px-4 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition">Predict a match</a>
+      </div>
+    </nav>
+  </header>
 
-      <!-- NUEVA sección del bracket, va primero -->
-      <section id="wc-knockout">
-        <h2>WC Knockout 2026</h2>
-        <div class="flex items-start justify-center gap-2">
-          <div id="bracket-izq" class="brackets-viewer"></div>
-          <div id="bracket-final" class="flex items-center" style="min-height: 400px;"></div>
-          <div id="bracket-der" class="brackets-viewer bracket-espejo"></div>
-        </div>
-      </section>
+  <main class="px-6 py-10">
+    <section id="wc-knockout">
+      <div class="max-w-6xl mx-auto text-center mb-10">
+        <h1 class="text-4xl font-extrabold text-slate-50 tracking-tight mb-3">Knockout Bracket</h1>
+        <p class="text-slate-400">Click any match to see the algorithm's prediction. <span class="text-yellow-400">Yellow</span> scores mean a draw decided on penalties.</p>
+      </div>
 
-      <!-- La sección que ya tenías, queda debajo -->
-      <section id="predict-a-match">
-        <h2 class="text-2xl font-semibold text-green-400 mb-4 mt-8">WC Knockout 2026</h2>
-        <div class="selectores">
-          <input id="equipoLocal" type="text" placeholder="Brazil" />
-          <span>vs</span>
-          <input id="equipoVisitante" type="text" placeholder="Japan" />
-          <button id="botonPredecir">Predecir</button>
-        </div>
-        <div id="detallePartido"></div>
-      </section>
-      <!-- Modal para el detalle del partido (oculto por defecto) -->
-      <div id="modalOverlay" class="modal-overlay oculto">
-        <div class="modal-contenido">
-          <button id="cerrarModal" class="cerrar">&times;</button>
-          <div id="modalDetalle"></div>
+      <!-- El bracket se escala por JS (ajustarEscala) para caber siempre en pantalla -->
+      <div class="w-full overflow-x-auto">
+        <div id="bracket-escalable" class="w-max mx-auto rounded-2xl border border-slate-800/80 bg-slate-900/40 p-4 md:p-6 shadow-2xl shadow-black/40">
+          <div class="flex items-stretch justify-center gap-1">
+            <div id="bracket-izq" class="brackets-viewer"></div>
+            <div id="bracket-final" class="flex items-center px-2"></div>
+            <div id="bracket-der" class="brackets-viewer bracket-espejo"></div>
+          </div>
         </div>
       </div>
-      <script type="module" src="/src/main.js"></script>
+    </section>
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-6 py-8 text-center text-xs text-slate-600">
+    Poisson model · Built with FastAPI + Vite
+  </footer>
+
+  <!-- Match detail modal (hidden by default) -->
+  <div id="modalOverlay" class="modal-overlay oculto">
+    <div class="modal-contenido">
+      <button id="cerrarModal" class="cerrar">&times;</button>
+      <div id="modalDetalle"></div>
     </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>

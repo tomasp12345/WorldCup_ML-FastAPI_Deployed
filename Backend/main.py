@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 # Importamos TU función de predicción (la de usar_modelo.py).
 # Al importar, se cargan el modelo y el elo UNA vez (patrón de oro).
-from UsarModelo import predecir_partido
+from UsarModelo import predecir_partido, listar_equipos
 
 app = FastAPI(title="Predictor Mundial 2026")
 
@@ -28,6 +28,11 @@ class PeticionPartido(BaseModel):
 @app.get("/")
 def raiz():
     return {"estado": "ok", "mensaje": "API del predictor funcionando"}
+
+# --- Lista de equipos válidos (para el autocompletado del buscador) ---
+@app.get("/equipos")
+def equipos():
+    return {"equipos": listar_equipos()}
 
 # --- Endpoint principal: recibe dos equipos, devuelve la predicción ---
 @app.post("/predecir")

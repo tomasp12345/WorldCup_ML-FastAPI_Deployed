@@ -8,7 +8,7 @@ const botonCerrar = document.getElementById("cerrarModal");
 // Abrir el modal con el detalle de un partido
 export async function abrirModal(local, visitante) {
   overlay.classList.remove("oculto");   // mostrar el modal
-  contenido.innerHTML = "<p>Cargando...</p>";
+  contenido.innerHTML = '<p class="text-slate-400">Loading...</p>';
 
   try {
     const respuesta = await fetch("http://localhost:8000/predecir", {
@@ -19,7 +19,7 @@ export async function abrirModal(local, visitante) {
     const datos = await respuesta.json();
     contenido.innerHTML = construirDetalle(datos, local, visitante);
   } catch (error) {
-    contenido.innerHTML = "<p>Error al cargar el detalle.</p>";
+    contenido.innerHTML = '<p class="text-slate-400">Could not load the details.</p>';
   }
 }
 
