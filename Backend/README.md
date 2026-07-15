@@ -1,13 +1,3 @@
----
-title: World Cup 2026 Predictor API
-emoji: ⚽
-colorFrom: green
-colorTo: blue
-sdk: docker
-app_port: 7860
-pinned: false
----
-
 # World Cup 2026 Predictor — Backend API
 
 API en FastAPI que predice partidos con un modelo de Poisson (scikit-learn) basado en el Elo FIFA.
@@ -17,5 +7,12 @@ API en FastAPI que predice partidos con un modelo de Poisson (scikit-learn) basa
 - `GET /equipos` — lista de equipos válidos (para el autocompletado).
 - `POST /predecir` — recibe `{equipo_local, equipo_visitante, es_neutral}` y devuelve la predicción.
 
-El bloque de arriba (entre `---`) es la configuración que **Hugging Face Spaces** lee para
-saber que es un Space de tipo Docker y que la app escucha en el puerto 7860.
+## Correr en local
+```bash
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+## Despliegue
+Incluye un `Dockerfile` listo para Render (u otro host con Docker). El contenedor
+arranca uvicorn en el puerto que indique la variable `$PORT`.

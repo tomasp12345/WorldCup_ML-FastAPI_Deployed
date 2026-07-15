@@ -1,4 +1,4 @@
-# Dockerfile para desplegar el backend en Hugging Face Spaces.
+# Dockerfile del backend (FastAPI). Sirve para Render y cualquier host con Docker.
 FROM python:3.13-slim
 
 # libgomp1 lo necesita scikit-learn (usa OpenMP).
@@ -15,7 +15,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar el resto del backend (main.py, UsarModelo.py, data/, etc.).
 COPY . .
 
-# Hugging Face Spaces expone el puerto 7860.
-EXPOSE 7860
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
+# El host (Render) inyecta el puerto en la variable $PORT; si no existe, usa 7860.
+CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-7860}
