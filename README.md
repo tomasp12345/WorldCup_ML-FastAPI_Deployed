@@ -1,4 +1,5 @@
 # World cup predictor
+https://world-cup-ml-fast-api-deployed.vercel.app/
 This project consists of a way of predicting the probabilities of any result given 2 countries. The project is divided in:
 - Model Creation: This starts with collecting the necessary data. I found a data source with all the international games
 from decades ago to the present day and decided to use the games from the last 4 years to the date for the training. I used
