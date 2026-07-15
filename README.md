@@ -11,7 +11,7 @@ only available with a paid subscription. To do this backend i had to learn how t
 but in my .py file to be able to use it with FastAPI.
 - Frontend: For the front i used JavaScript+VITE and i deployed it with vercel. I had used vercel before so it was easier this time.
 # Notes:
-- This project does not include a database system. There is no login and no personalized experience since the main goal was to learn
+- This project does not include a database service. There is no login and no personalized experience since the main goal was to learn
 how to deploy a ML model.
 - The model still needs work, as mentioned it is a very simple model.
 - I learned that sometimes the data collection can be one of the most complex parts in the cycle of deploying a model and creating it from scratch.
