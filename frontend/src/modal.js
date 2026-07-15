@@ -1,5 +1,6 @@
 // src/modal.js
 import { construirDetalle } from "./predictMatch.js";  // reutilizamos tu función
+import { API_URL } from "./config.js";
 
 const overlay = document.getElementById("modalOverlay");
 const contenido = document.getElementById("modalDetalle");
@@ -11,7 +12,7 @@ export async function abrirModal(local, visitante) {
   contenido.innerHTML = '<p class="text-slate-400">Loading...</p>';
 
   try {
-    const respuesta = await fetch("http://localhost:8000/predecir", {
+    const respuesta = await fetch(`${API_URL}/predecir`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ equipo_local: local, equipo_visitante: visitante, es_neutral: true }),

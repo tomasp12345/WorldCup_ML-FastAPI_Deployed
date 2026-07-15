@@ -2,6 +2,7 @@
 // Página "Predecir un partido": el usuario escribe dos equipos y pedimos la predicción a la API.
 import "./style.css";
 import { construirDetalle } from "./predictMatch.js";
+import { API_URL } from "./config.js";
 
 const boton = document.getElementById("botonPredecir");
 const detalle = document.getElementById("detallePartido");
@@ -9,7 +10,7 @@ const detalle = document.getElementById("detallePartido");
 // Cargar la lista de equipos válidos para el autocompletado (datalist).
 async function cargarEquipos() {
   try {
-    const r = await fetch("http://localhost:8000/equipos");
+    const r = await fetch(`${API_URL}/equipos`);
     if (!r.ok) return;
     const { equipos } = await r.json();
     const lista = document.getElementById("lista-equipos");
@@ -34,7 +35,7 @@ async function predecir() {
   detalle.innerHTML = mensaje("Predicting...");
 
   try {
-    const respuesta = await fetch("http://localhost:8000/predecir", {
+    const respuesta = await fetch(`${API_URL}/predecir`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

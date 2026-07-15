@@ -7,28 +7,26 @@ import numpy as np
 import pandas as pd
 from scipy.stats import poisson
 
-# --- Cargar lo guardado (se hace una vez, al importar el módulo) ---
+# Cargar modelo y datos
 modelo = joblib.load("data/modelo_poisson.joblib")
 elo_fifa = joblib.load("data/elo_fifa.joblib")
 
-# --- Lista de equipos que el modelo conoce (para el autocompletado del frontend) ---
+# Listar equipos ordenados (keys del diccionario de Elo FIFA)
 def listar_equipos():
-    # elo_fifa es un dict {nombre_equipo: elo}. Devolvemos los nombres ordenados.
     return sorted(elo_fifa.keys())
 
-# --- Función auxiliar: la matriz de marcadores (la misma de 2.PepararDatos_ElegirModelo.ipynb)
+# Matriz de marcadores 
 def matriz_marcadores(lambda_local, lambda_visitante, max_goles=6):
-    probs_local = [poisson.pmf(i, lambda_local) for i in range(max_goles + 1)]
+    probs_local = [poisson.pmf(i, lambda_local) for i in range(max_goles + 1)] #Probabilidad de i goles dado un lambda - da una lista de probabilidades
     probs_visitante = [poisson.pmf(j, lambda_visitante) for j in range(max_goles + 1)]
-    matriz = np.zeros((max_goles + 1, max_goles + 1))
+    matriz = np.zeros((max_goles + 1, max_goles + 1)) #Crea la matriz vacia
     for i in range(max_goles + 1):
         for j in range(max_goles + 1):
-            matriz[i, j] = probs_local[i] * probs_visitante[j]
+            matriz[i, j] = probs_local[i] * probs_visitante[j] #Recorre toda la matriz poniendo proba de i goles del local * j goles del visitante
     return matriz
 
-# --- LA FUNCIÓN ESTRELLA: de nombres a predicción ---
 def predecir_partido(equipo_local, equipo_visitante, es_neutral=True, max_goles=6):
-    # --- (igual que antes: traducir nombres, predecir lambdas) ---
+    #Prepara todo para predecir
     elo_local = elo_fifa[equipo_local]
     elo_visit = elo_fifa[equipo_visitante]
     es_local_flag = 0 if es_neutral else 1
@@ -39,36 +37,33 @@ def predecir_partido(equipo_local, equipo_visitante, es_neutral=True, max_goles=
                            columns=["mi_elo", "elo_rival", "es_local"])
 
     lambda_local = modelo.predict(X_local)[0]
-    lambda_visit = modelo.predict(X_visit)[0]
+    lambda_visit = modelo.predict(X_visit)[0] #Pongo el 0 porque predict devuelve un array de 1 elemento, y quiero el valor.
 
-    m = matriz_marcadores(lambda_local, lambda_visit, max_goles)
+    m = matriz_marcadores(lambda_local, lambda_visit, max_goles) #llama la funcion de matriz.
 
-    # --- Marcador probable y resultado (igual que antes) ---
-    idx = np.unravel_index(np.argmax(m), m.shape)
+    # Marcador mas probable y probabilidades gana local/empate/gana visitante 
+    idx = np.unravel_index(np.argmax(m), m.shape) #argmax devuelve el indice del maximo valor de la matriz, y unravel_index lo convierte en coordenadas (i,j)
     prob_gana_local = prob_empate = prob_gana_visit = 0.0
     for i in range(m.shape[0]):
         for j in range(m.shape[1]):
-            if i > j:   prob_gana_local += m[i, j]
+            if i > j:   prob_gana_local += m[i, j] #van acumulando probabilidades
             elif i == j: prob_empate += m[i, j]
             else:        prob_gana_visit += m[i, j]
 
-    # --- NUEVO 1: over/under por equipo ---
-    # Probabilidad de que el LOCAL meta MÁS de cierto umbral.
-    # "más de 0.5" = 1 o más; "más de 1.5" = 2 o más; etc.
-    def over_equipo(probs_goles, umbral):
-        # probs_goles: lista con P(mete 0), P(mete 1), ...
-        # "más de umbral" = sumar las probabilidades de meter MÁS goles que el umbral.
+    # Over/under por equipo 
+    def over_equipo(probs_goles, umbral): #suma p o/u para un equipo dado un umbral y un vector con las p de cada cantidad de goles
         return sum(p for goles, p in enumerate(probs_goles) if goles > umbral)
 
-    # Probabilidades de goles de cada equipo (sumando filas/columnas de la matriz)
+    # suma p de goles de cada equipo (sumando filas/columnas de la matriz)
     probs_local = m.sum(axis=1)   # sumar cada fila = P(local mete i)
     probs_visit = m.sum(axis=0) # sumar cada columna = P(visitante mete j)
 
     umbrales = [0.5, 1.5, 2.5]
-    over_local = {f"over_{u}": round(over_equipo(probs_local, u), 3) for u in umbrales}
+    over_local = {f"over_{u}": round(over_equipo(probs_local, u), 3) for u in umbrales} 
     over_visit = {f"over_{u}": round(over_equipo(probs_visit, u), 3) for u in umbrales}
+    #Me devuelvo un diccionario tipo {"over_0.5": 0.734, "over_1.5": 0.443, "over_2.5": 0.143}
 
-    # --- NUEVO 2: over/under combinado (total del partido) ---
+    # Over/under combinado (total del partido) 
     umbrales_total = [0.5, 1.5, 2.5, 3.5]
     over_total = {}
     for u in umbrales_total:

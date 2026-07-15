@@ -9,10 +9,13 @@ from UsarModelo import predecir_partido, listar_equipos
 
 app = FastAPI(title="Predictor Mundial 2026")
 
-# --- CORS: permitir que el frontend (Vite) hable con este backend ---
+# --- CORS: permitir que el frontend hable con este backend ---
+# - localhost:5173  -> tu desarrollo local (Vite)
+# - *.vercel.app    -> el frontend desplegado en Vercel (cualquier subdominio)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # el puerto de Vite
+    allow_origins=["http://localhost:5173"],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_methods=["*"],
     allow_headers=["*"],
 )
